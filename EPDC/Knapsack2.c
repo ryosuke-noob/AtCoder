@@ -22,7 +22,9 @@ int main(void)
 	rep(i,1,N + 1) scanf("%d %d",&w[i],&v[i]);
 	dp = (double **)malloc(sizeof(double *) * (N + 1));
 	rep(i,0,N + 1) dp[i] = (double *)malloc(sizeof(double) * (max_value + 1));
-	rep(i,0,N + 1) rep(j,0,max_value + 1) dp[i][j] = INT_MAX;//int型に収まるうちできるだけ大きい数
+	rep(i,0,N + 1) rep(j,0,max_value + 1) dp[i][j] = INT_MAX;
+	//int型に収まるうちできるだけ大きい数
+	//多分Wより大きければなんでもいい
 	dp[0][0] = 0;
 
 	rep(i,1,N + 1)
