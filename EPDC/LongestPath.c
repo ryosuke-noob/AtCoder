@@ -7,37 +7,33 @@
 #define max(p,q) ((p)>(q)?(p):(q))
 #define min(p,q) ((p)<(q)?(p):(q))
 
-int back(int *x, int *y, int m, int a)
+int back(int *x, int *y, int m, int a, int *dp, int *flag)
 {
-	int ret;
-
-	ret = 0;
+	if (flag[a]) return (dp[a]);
+	flag[a] = 1;
 	rep(i,1,m+1) if (x[i] == a)
 	{
-		ret = max(ret, back(x,y,m,y[i]) + 1);
-		//printf("[%d-%d:%d] ",x[i],y[i],ret);
+		dp[a] = max(dp[a], back(x,y,m,y[i],dp,flag) + 1);
+		// printf("[%d-%d:%d] ",x[i],y[i],dp[a]);
 	}
-	return (ret);
+	return (dp[a]);
 }
 
 int main(void)
 {
 	int n,m,Max = 0;
 	int *x,*y;
-	// int **dp;
+	int *dp, *flag;
 
 	(void)scanf("%d %d",&n,&m);
 	x = (int *)malloc(sizeof(int) * (m + 1));
 	y = (int *)malloc(sizeof(int) * (m + 1));
 	rep(i,1,m + 1) (void)scanf("%d %d",&x[i], &y[i]);
-	// dp = (int **)malloc(sizeof(int *) * (n + 1));
-	// rep(i,0,n + 1) dp[i] = (int *)malloc(sizeof(int) * (n + 1));
-	
-	rep(i,1,m + 1)
-	{
-		Max = max(Max, back(x,y,m,x[i]));
-		//printf("\nhere\n");
-	}
+	dp = (int *)malloc(sizeof(int) * (n + 1));
+	flag = (int *)malloc(sizeof(int) * (n + 1));
+	rep(i,1,n+1) {dp[i] = 0; flag[i] = 0;}
+
+	rep(i,1,m+1) Max = max(Max, back(x,y,m,x[i],dp,flag));
 
 	printf("%d\n",Max);
 
