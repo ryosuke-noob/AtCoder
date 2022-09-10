@@ -1,12 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <limits.h>
 #define rep(i,l,r) for(int i=(l);i<(r);i++)
 #define max(p,q) ((p)>(q)?(p):(q))
-#define min(p,q) ((p)<(q)?(p):(q))
-
+ 
 int back(int *x, int *y, int m, int a, int *dp, int *flag)
 {
 	if (flag[a]) return (dp[a]);
@@ -14,11 +10,10 @@ int back(int *x, int *y, int m, int a, int *dp, int *flag)
 	rep(i,1,m+1) if (x[i] == a)
 	{
 		dp[a] = max(dp[a], back(x,y,m,y[i],dp,flag) + 1);
-		// printf("[%d-%d:%d] ",x[i],y[i],dp[a]);
 	}
 	return (dp[a]);
 }
-
+ 
 int main(void)
 {
 	int n,m,Max = 0;
@@ -32,10 +27,10 @@ int main(void)
 	dp = (int *)malloc(sizeof(int) * (n + 1));
 	flag = (int *)malloc(sizeof(int) * (n + 1));
 	rep(i,1,n+1) {dp[i] = 0; flag[i] = 0;}
-
+ 
 	rep(i,1,m+1) Max = max(Max, back(x,y,m,x[i],dp,flag));
 
 	printf("%d\n",Max);
-
+ 
 	return (0);
 }
