@@ -19,21 +19,18 @@ int main(void)
 	dp = (long int **)malloc(sizeof(long int *) * (n+1));
 	rep (i,0,n+1) dp[i] = (long int *)malloc(sizeof(long int) * (k+1));
 	rep(i,0,k+1) rep(j,0,n+1) dp[j][i] = 0;
-	dp[0][0] = 1;
-	rep(i,1,n+1) dp[i][0] = dp[i - 1][0] + 1;
-	rep(i,1,k+1) dp[0][i] = dp[0][i - 1];
+	rep(i,0,n+1) dp[i][0] = 1;
 
 	rep(i,1,n+1)
 	{
 		rep(j,1,k+1)
 		{
-			if (j >= a[i]) dp[i][j] = dp[i - 1][j] - dp[i - 1][j - a[i]];
-			else dp[i][j] = dp[i - 1][j] - 0;
-			if (i != n || j != k) dp[i][j] += dp[i][j -  1];
+			rep(l,0,a[i]+1)
+			{
+				if (l <= j) dp[i][j] += dp[i - 1][j - l];
+			}
 		}
 	}
-	rep(i,0,n+1) {rep(j,0,k+1) {printf("%2ld ",dp[i][j]);} printf("\n");}
-
 	printf("%ld\n",dp[n][k] % (1000000007));
 	return (0);
 }
