@@ -6,36 +6,30 @@
 #define rep(i,l,r) for(int i=(l);i<(r);i++)
 #define max(p,q) ((p)>(q)?(p):(q))
 #define min(p,q) ((p)<(q)?(p):(q))
+#define MOD 1000000007
 
 int main(void)
 {
 	int n,k;
 	int *a;
 	unsigned long long **dp;
-	unsigned long long **dp2;
+	unsigned long long *cum;
 
-	scanf("%d %d",&n,&k);
+	if (scanf("%d %d",&n,&k) != 2) return 1;
 	a = (int *)malloc(sizeof(int)*(n+1));
-	rep(i,1,n+1) scanf("%d",&a[i]);
+	for(int i = 1;i < n+1;i++) if (scanf("%d",&a[i]) != 1) return 1;
 	dp = (unsigned long long **)malloc(sizeof(unsigned long long *) * (n+1));
-	rep (i,0,n+1) dp[i] = (unsigned long long *)malloc(sizeof(unsigned long long) * (k+1));
-	dp2 = (unsigned long long **)malloc(sizeof(unsigned long long *) * (n+1));
-	rep (i,0,n+1) dp2[i] = (unsigned long long *)malloc(sizeof(unsigned long long) * (k+1));
-	rep(i,0,k+1) {rep(j,0,n+1) {dp[j][i] = 0; dp2[j][i] = 0;} dp2[0][i] = 1;}
-	rep(i,0,n+1) {dp[i][0] = 1; dp2[i][0] = 1;}
+	for(int i = 0;i < n+1;i++) dp[i] = (unsigned long long *)malloc(sizeof(unsigned long long) * (k+2));
+	cum = (unsigned long long *)malloc(sizeof(unsigned long long) * (k+2));
+	rep(i,0,k+1) {rep(j,0,n+1) dp[j][i] = 0;}
+	rep(i,0,n+1) {dp[i][0] = 1;}
 
-	rep(i,1,n+1)
+	for(int i = 1;i < n+1;i++)
 	{
-		rep(j,1,k+1)
-		{
-			if (j >= a[i]) dp[i][j] = (dp2[i - 1][j] - dp2[i - 1][j - a[i]] + dp[i - 1][j - a[i]])% 1000000007;
-			else dp[i][j] = dp2[i-1][j];
-			dp2[i][j] = (dp[i][j] + dp2[i][j - 1]);
-		}
+		cum[0] = 0;
+		rep(j,1,k+1+1) cum[j] = (cum[j-1]+dp[i-1][j-1])%MOD;
+		rep(j,0,k+1) dp[i][j] = (cum[j+1]-cum[max(0,j-a[i])]+MOD)%MOD;
 	}
-	// rep(i,0,n+1) {rep(j,0,k+1) {printf("%2ld ",dp[i][j]);} printf("\n");}
-	// printf("\n");
-	// rep(i,0,n+1) {rep(j,0,k+1) {printf("%2ld ",dp2[i][j]);} printf("\n");}
-	printf("%.0lf\n", (double)dp[n][k]);
+	printf("%I64d\n", dp[n][k]);
 	return (0);
 }
